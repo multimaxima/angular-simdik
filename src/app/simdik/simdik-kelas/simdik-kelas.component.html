@@ -1,0 +1,85 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="float-end">
+        <button mat-mini-fab class="float-end" color="primary" matTooltip="Tambah Data" (click)="getDetil(0)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <div class="row bodi">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let row" class="min">
+                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="getDetil(row.id)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit Data</span>
+                  </button>
+                  <button mat-menu-item (click)="getHapus(row.id)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Hapus Data</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="kelas">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> KELAS </th>
+              <td mat-cell *matCellDef="let row" class="datacell">
+                {{ row.kelas }}
+                {{ row.kode ? ' '+row.kode : '' }}
+                {{ row.sub_kelas }}
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="walikelas">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> WALIKELAS </th>
+              <td mat-cell *matCellDef="let row" class="datacell">
+                {{ row.gelar_depan ? row.gelar_depan+' ' : '' }}
+                {{ row.nama | uppercase }}
+                {{ row.gelar_belakang ? ', '+row.gelar_belakang : '' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="kurikulum">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> KURIKULUM </th>
+              <td mat-cell *matCellDef="let row" class="datacell"> {{ row.kurikulum }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="siswa">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> SISWA </th>
+              <td mat-cell *matCellDef="let row" class="datacell"> {{ row.siswa }} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

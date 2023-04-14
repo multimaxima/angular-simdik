@@ -1,0 +1,111 @@
+<main id="main" class="main" *ngIf="!editMode">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="float-end">
+        <button mat-mini-fab class="float-end" color="primary" matTooltip="Tambah Data" (click)="getDetil(0)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <div class="card card-body bodi">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="min">
+          <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="getDetil(row.id)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit Data</span>
+            </button>
+            <button mat-menu-item (click)="getReset(row.id, row)">
+              <mat-icon>key</mat-icon>
+              <span>Reset Password</span>
+            </button>
+            <button mat-menu-item (click)="getHapus(row.id, row)">
+              <mat-icon>delete</mat-icon>
+              <span>Hapus Data</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="foto">
+        <th mat-header-cell *matHeaderCellDef> FOTO </th>
+        <td mat-cell *matCellDef="let row" class="min">
+          <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto" style="border-radius: 10px;">
+          <img src="{{ row.foto}}" width="40" *ngIf="row.foto" style="border-radius: 10px;">
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nama">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> NAMA </th>
+        <td mat-cell *matCellDef="let row" class="datacell">
+          {{ row.gelar_depan ? row.gelar_depan+' ' : '' }}
+          {{ row.nama | uppercase }}
+          {{ row.gelar_belakang ? ', '+row.gelar_belakang : '' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="alamat">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ALAMAT </th>
+        <td mat-cell *matCellDef="let row" class="datacell">
+          {{ row.alamat | uppercase }}
+          {{ (row.kota ? ', '+row.kota : '') | uppercase }}
+          {{ (row.propinsi ? ', '+row.propinsi : '') | uppercase }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="jabatan">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> JABATAN </th>
+        <td mat-cell *matCellDef="let row" class="datacell"> {{ row.jabatan | uppercase }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="hp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> HP </th>
+        <td mat-cell *matCellDef="let row" class="datacell"> {{row.hp}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="akses">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> HAK AKSES </th>
+        <td mat-cell *matCellDef="let row" class="datacell">
+          <ul>
+            <li *ngIf="row.administrator == 1">Administrator</li>
+            <li *ngIf="row.kepsek == 1">Kepala Sekolah</li>
+            <li *ngIf="row.waka == 1">Wakil Kepala Sekolah</li>
+            <li *ngIf="row.tu == 1">Tata Usaha</li>
+            <li *ngIf="row.guru == 1">Guru Pengajar</li>
+            <li *ngIf="row.guru_bp == 1">Guru BK</li>
+            <li *ngIf="row.perpus == 1">Perpustakaan</li>
+            <li *ngIf="row.web_operator == 1">Operator Web Sekolah</li>
+            <li *ngIf="row.ppdb == 1">Penerimaan Peserta Didik Baru</li>
+            <li *ngIf="row.bel_sekolah == 1">Bel Sekolah</li>
+          </ul>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+</main>
+
+<app-simdik-guru-detil [idGuru]="idGuru" (newItemEvent)="getData()" *ngIf="editMode"></app-simdik-guru-detil>

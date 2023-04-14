@@ -1,0 +1,140 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="float-end">
+        <button mat-mini-fab color="primary" matTooltip="Simpan Data" [disabled]="!formData.valid || submitted"
+          (click)="onSubmit()">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="formData" id="formData">
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Sumber Air</mat-label>
+                  <input matInput formControlName="sumber_air">
+                  <mat-error *ngIf="m['sumber_air'].errors && m['sumber_air'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Sumber Air Minum</mat-label>
+                  <input matInput formControlName="sumber_air_minum">
+                  <mat-error *ngIf="m['sumber_air_minum'].errors && m['sumber_air_minum'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Kecukupan Air Bersih Per Hari</mat-label>
+                  <input type="number" step="any" matInput formControlName="kecukupan_air_bersih">
+                  <span matSuffix style="margin-right: 8px;">Liter</span>
+                  <mat-error
+                    *ngIf="m['kecukupan_air_bersih'].errors && m['kecukupan_air_bersih'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Jumlah Jamban Untuk Siswa Berkebutuhan Khusus</mat-label>
+                  <input type="number" step="any" matInput formControlName="jamban_kebutuhan_khusus">
+                  <mat-error
+                    *ngIf="m['jamban_kebutuhan_khusus'].errors && m['jamban_kebutuhan_khusus'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Tipe Jamban</mat-label>
+                  <input matInput formControlName="tipe_jamban">
+                  <mat-error *ngIf="m['tipe_jamban'].errors && m['tipe_jamban'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Cuci Tangan Per Hari</mat-label>
+                  <input type="number" step="any" matInput formControlName="hari_cuci_tangan">
+                  <mat-error *ngIf="m['hari_cuci_tangan'].errors && m['hari_cuci_tangan'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Jumlah Tempat Cuci Tangan</mat-label>
+                  <input type="number" step="any" matInput formControlName="jml_cuci_tangan">
+                  <mat-error *ngIf="m['jml_cuci_tangan'].errors && m['jml_cuci_tangan'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Jumlah Tempat Cuci Tangan Rusak</mat-label>
+                  <input type="number" step="any" matInput formControlName="jml_cuci_tangan_rusak">
+                  <mat-error
+                    *ngIf="m['jml_cuci_tangan_rusak'].errors && m['jml_cuci_tangan_rusak'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Cuci Tangan Dengan Sabun dan Air Mengalir</mat-label>
+                  <input matInput formControlName="sabun_air_mengalir">
+                  <mat-error *ngIf="m['sabun_air_mengalir'].errors && m['sabun_air_mengalir'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Pembuangan Limbah Jamban</mat-label>
+                  <input matInput formControlName="pembuangan_limbah_jamban">
+                  <mat-error
+                    *ngIf="m['pembuangan_limbah_jamban'].errors && m['pembuangan_limbah_jamban'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Pengurasan Tangki Septik Setiap</mat-label>
+                  <input matInput formControlName="kuras_tangki_septik">
+                  <mat-error
+                    *ngIf="m['kuras_tangki_septik'].errors && m['kuras_tangki_septik'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,50 @@
+<div class="dialog-title">
+  {{ data.data.id ? 'EDIT EVENT' : 'TAMBAH EVENT'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Tanggal</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="tanggal">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="m['tanggal'].errors && m['tanggal'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Jam</mat-label>
+      <input type="time" matInput formControlName="jam">
+      <mat-error *ngIf="m['jam'].errors && m['jam'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Suara Bel</mat-label>
+      <mat-select formControlName="id_suara">
+        <mat-option *ngFor="let sur of data.suara" [value]="sur.id" (onSelectionChange)="onPilih(sur.id)">{{ sur.keterangan }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_suara'].errors && m['id_suara'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <audio controls="controls" *ngIf="bel" class="w-100 mb-2">
+      <source [src]="bel" type="audio/mp3">
+    </audio>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Keterangan</mat-label>
+      <input matInput formControlName="keterangan">
+      <mat-error *ngIf="m['keterangan'].errors && m['keterangan'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>

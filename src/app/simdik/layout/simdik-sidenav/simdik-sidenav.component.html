@@ -1,0 +1,191 @@
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" routerLink="/simdik/dashboard">
+          <i class="bi bi-speedometer"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <ng-container *ngIf="administrator == '1'">
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#components-parameter" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-gear"></i>
+            <span>Parameter Sekolah</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="components-parameter" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li><a routerLink="/simdik/parameter/data-sekolah"><i class="bi bi-circle"></i><span>Data Sekolah</span></a></li>
+            <li><a routerLink="/simdik/parameter/sarpras"><i class="bi bi-circle"></i><span>Sarana Prasarana</span></a></li>
+            <li><a routerLink="/simdik/parameter/sanitasi"><i class="bi bi-circle"></i><span>Sanitasi Sekolah</span></a></li>
+            <li><a routerLink="/simdik/parameter/pengaturan"><i class="bi bi-circle"></i><span>Pengaturan Pembayaran</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#components-variabel" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-clipboard-data"></i>
+            <span>Variabel Data</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="components-variabel" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li><a routerLink="/simdik/variabel/agama"><i class="bi bi-circle"></i><span>Agama</span></a></li>
+            <li><a routerLink="/simdik/variabel/bahasa"><i class="bi bi-circle"></i><span>Bahasa</span></a></li>
+            <li><a routerLink="/simdik/variabel/pekerjaan"><i class="bi bi-circle"></i><span>Pekerjaan</span></a></li>
+            <li><a routerLink="/simdik/variabel/pendidikan"><i class="bi bi-circle"></i><span>Pendidikan</span></a></li>
+            <li><a routerLink="/simdik/variabel/mata-pelajaran"><i class="bi bi-circle"></i><span>Mata Pelajaran</span></a></li>
+            <li><a routerLink="/simdik/variabel/jurusan"><i class="bi bi-circle"></i><span>Jurusan</span></a></li>
+            <li><a routerLink="/simdik/variabel/jenis-ujian"><i class="bi bi-circle"></i><span>Jenis Ujian</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#components-pengguna" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-person-circle"></i>
+            <span>Daftar Pengguna</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="components-pengguna" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li><a routerLink="/simdik/guru"><i class="bi bi-circle"></i><span>Guru</span></a></li>
+            <li><a routerLink="/simdik/siswa"><i class="bi bi-circle"></i><span>Siswa</span></a></li>
+            <li><a routerLink="/simdik/wali"><i class="bi bi-circle"></i><span>Wali</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/kelas">
+            <i class="bi bi-building-check"></i>
+            <span>Daftar Kelas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/mata-pelajaran">
+            <i class="bi bi-card-checklist"></i>
+            <span>Jadwal Mata Pelajaran</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#components-bel" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-bell-fill"></i>
+            <span>Bel Sekolah</span>
+            <i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="components-bel" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li><a routerLink="/simdik/bel-sekolah"><i class="bi bi-circle"></i><span>Bel Sekolah Harian</span></a></li>
+            <li><a routerLink="/simdik/bel-sekolah-event"><i class="bi bi-circle"></i><span>Bel Terjadwal</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/kalender-pendidikan">
+            <i class="bi bi-calendar3"></i>
+            <span>Kalender Pendidikan</span>
+          </a>
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="kepsek == '1'">
+
+      </ng-container>
+
+      <ng-container *ngIf="waka == '1'">
+
+      </ng-container>
+
+      <ng-container *ngIf="tu == '1'">
+
+      </ng-container>
+
+      <ng-container *ngIf="guru == '1'">
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/bank-soal">
+            <i class="bi bi-blockquote-left"></i>
+            <span>Bank Soal</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/ujian">
+            <i class="bi bi-blockquote-left"></i>
+            <span>Ujian/Tugas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/pengawasan-ujian">
+            <i class="bi bi-blockquote-left"></i>
+            <span>Pengawasan Ujian/Tugas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/hasil-ujian">
+            <i class="bi bi-blockquote-left"></i>
+            <span>Hasil Ujian</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/nilai-siswa">
+            <i class="bi bi-blockquote-left"></i>
+            <span>Daftar Nilai Siswa</span>
+          </a>
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="walikelas == '1'">
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/absensi-siswa">
+            <i class="bi bi-blockquote-left"></i>
+            <span>Absensi Siswa</span>
+          </a>
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="guru_bp == '1'">
+        
+      </ng-container>
+
+      <ng-container *ngIf="perpus == '1'">
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/katalog">
+            <i class="bi bi-book-half"></i>
+            <span>Katalog</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/katalog-item">
+            <i class="bi bi-journal-text"></i>
+            <span>Katalog Item</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/katalog-keluar">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Buku Keluar</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/katalog-kembali">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Buku Kembali</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/katalog-dipinjam">
+            <i class="bi bi-journal-text"></i>
+            <span>Data Buku Dipinjam</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" routerLink="/simdik/perpus-kas">
+            <i class="bi bi-cash-coin"></i>
+            <span>Kas Perpustakaan</span>
+          </a>
+        </li>        
+      </ng-container>
+
+      <ng-container *ngIf="web_operator == '1'">
+
+      </ng-container>
+
+      <ng-container *ngIf="ppdb == '1'">
+
+      </ng-container>
+
+      <ng-container *ngIf="bel_sekolah == '1'">
+
+      </ng-container>
+    </ul>
+  </aside>

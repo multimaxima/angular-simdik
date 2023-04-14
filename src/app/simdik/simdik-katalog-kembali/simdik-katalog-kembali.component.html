@@ -1,0 +1,174 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <form [formGroup]="formBarcode">
+        <mat-form-field style="width: 100%;" appearance="outline">
+          <mat-label>Masukkan Barcode Buku</mat-label>
+          <input matInput formControlName="barcode">
+          <button matSuffix mat-icon-button (click)="onBarcode()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <form [formGroup]="formNis">
+        <mat-form-field style="width: 100%;" appearance="outline">
+          <mat-label>Masukkan NIS Siswa</mat-label>
+          <input matInput formControlName="nis">
+          <button matSuffix mat-icon-button (click)="onNis()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <form [formGroup]="formNip">
+        <mat-form-field style="width: 100%;" appearance="outline">
+          <mat-label>Masukkan NIP Guru</mat-label>
+          <input matInput formControlName="nip">
+          <button matSuffix mat-icon-button (click)="onNip()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  
+  <div class="card bodi" *ngIf="siswa">
+    <div class="card-body">
+      <table width="100%">
+        <tr>
+          <td width="15%">Foto Siswa</td>
+          <td width="2%">:</td>
+          <td>
+            <img src="assets/noimage.jpg" width="100" *ngIf="!siswa.foto" style="border-radius: 0;">
+            <img src="{{ siswa.foto}}" width="100" *ngIf="siswa.foto" style="border-radius: 0;">
+          </td>
+        </tr>
+        <tr>
+          <td>Nama Siswa</td>
+          <td>:</td>
+          <td style="font-weight: bold;">{{ siswa.nama }}</td>
+        </tr>
+        <tr>
+          <td>NIS</td>
+          <td>:</td>
+          <td style="font-weight: bold;">{{ siswa.nis }}</td>
+        </tr>
+        <tr>
+          <td>Kelas</td>
+          <td>:</td>
+          <td style="font-weight: bold;">
+            {{ siswa.kelas }}
+            {{ siswa.kode ? siswa.kode : "" }}
+            {{ siswa.sub_kelas ? siswa.sub_kelas : "" }}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card bodi" *ngIf="guru">
+    <div class="card-body">
+      <table width="100%">
+        <tr>
+          <td width="15%">Foto Guru</td>
+          <td width="2%">:</td>
+          <td>
+            <img src="assets/noimage.jpg" width="100" *ngIf="!guru.foto" style="border-radius: 0;">
+            <img src="{{ guru.foto}}" width="100" *ngIf="guru.foto" style="border-radius: 0;">
+          </td>
+        </tr>
+        <tr>
+          <td>Nama Guru</td>
+          <td>:</td>
+          <td style="font-weight: bold;">{{ guru.nama }}</td>
+        </tr>
+        <tr>
+          <td>NIP</td>
+          <td>:</td>
+          <td style="font-weight: bold;">{{ guru.nip }}</td>
+        </tr>
+        <tr>
+          <td>Jabatan</td>
+          <td>:</td>
+          <td style="font-weight: bold;"> {{ guru.jabatan }} </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="(siswa || guru) && buku">
+    <div class="card-body">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row" class="min">
+            <button mat-icon-button matTooltip="Kembali" (click)="onKembali(row)">
+              <mat-icon>manage_history</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cover">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> COVER </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            <img src="{{ row.cover }}" width="50" *ngIf="row.cover">
+            <img src="assets/noimg.png" width="50" *ngIf="!row.cover">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="judul">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> JUDUL </th>
+          <td mat-cell *matCellDef="let row" class="datacell"> {{ row.judul | uppercase }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> KODE </th>
+          <td mat-cell *matCellDef="let row" class="datacell">
+            {{ row.barcode }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pinjam">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> PINJAM </th>
+          <td mat-cell *matCellDef="let row" class="datacell"> {{ row.tgl_pinjam | date:'dd/MM/yyyy' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="harusKembali">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> HARUS KEMBALI </th>
+          <td mat-cell *matCellDef="let row" class="datacell"> {{ row.tgl_harus_kembali | date:'dd/MM/yyyy' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kembali">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> KEMBALI </th>
+          <td mat-cell *matCellDef="let row" class="datacell"> {{ row.tgl_kembali | date:'dd/MM/yyyy' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+          <td mat-cell *matCellDef="let row" class="datacell"> {{ row.kembali == 1 ? 'KEMBALI' : 'DIPINJAM' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="denda">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DENDA (Rp.) </th>
+          <td mat-cell *matCellDef="let row" class="datacell" style="text-align: right;"> {{ row.denda | number }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</main>

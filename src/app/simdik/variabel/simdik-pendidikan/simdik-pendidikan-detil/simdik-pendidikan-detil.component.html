@@ -1,0 +1,24 @@
+<div class="dialog-title">
+  {{ data.id ? 'EDIT PENDIDIKAN' : 'TAMBAH PENDIDIKAN'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <mat-label>Jenis Pendidikan</mat-label>
+      <input matInput formControlName="pendidikan">
+      <mat-error *ngIf="m['pendidikan'].errors && m['pendidikan'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>

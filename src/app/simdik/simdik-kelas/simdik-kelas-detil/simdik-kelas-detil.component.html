@@ -1,0 +1,63 @@
+<div class="dialog-title">
+  {{ data ? 'EDIT KELAS' : 'TAMBAH KELAS'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Kelas</mat-label>
+      <mat-select formControlName="id_kelas">
+        <mat-option *ngFor="let kls of kelas" [value]="kls.id">{{ kls.tingkat }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_kelas'].errors && m['id_kelas'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Jurusan</mat-label>
+      <mat-select formControlName="id_jurusan">
+        <mat-option [value]=""></mat-option>
+        <mat-option *ngFor="let jur of jurusan" [value]="jur.id">{{ jur.jurusan }} ({{ jur.kode }})</mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_jurusan'].errors && m['id_jurusan'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Sub Kelas</mat-label>
+      <input matInput formControlName="sub_kelas">
+      <mat-error *ngIf="m['sub_kelas'].errors && m['sub_kelas'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Walikelas</mat-label>
+      <mat-select formControlName="id_simdik">
+        <mat-option [value]=""></mat-option>
+        <mat-option *ngFor="let gur of guru" [value]="gur.id">
+          {{ gur.gelar_depan ? gur.gelar_depan+' ' : '' }}
+          {{ gur.nama }}
+          {{ gur.gelar_belakang ? ' '+gur.gelar_belakang : '' }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_simdik'].errors && m['id_simdik'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Kurikulum</mat-label>
+      <mat-select formControlName="id_kurikulum">
+        <mat-option [value]=""></mat-option>
+        <mat-option *ngFor="let kur of kurikulum" [value]="kur.id"> {{ kur.kurikulum }} </mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_kurikulum'].errors && m['id_kurikulum'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>

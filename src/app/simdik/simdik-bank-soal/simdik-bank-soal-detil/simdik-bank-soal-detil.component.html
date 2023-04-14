@@ -1,0 +1,63 @@
+<div class="dialog-title">
+  {{ data.data.id ? 'EDIT SOAL' : 'TAMBAH SOAL'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Jenis Soal</mat-label>
+      <mat-select formControlName="jenis">
+        <mat-option value="PILIHAN GANDA">PILIHAN GANDA</mat-option>
+        <mat-option value="ISIAN">ISIAN</mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['jenis'].errors && m['jenis'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <h2>SOAL</h2>
+    <editor [init]="options" formControlName="soal"></editor>
+    <mat-divider></mat-divider>
+
+    <div formArrayName="jawaban">
+      <div *ngFor="let quantity of jawaban().controls; let i=index" [formGroupName]="i">
+        <div class="row" style="margin-top: 15px;">
+          <div class="col-12">
+            <h2 class="float-start">JAWABAN {{ i + 1 }}</h2>
+            <button mat-icon-button matTooltip="Hapus Jawaban {{ i + 1 }}" (click)="removeJawaban(i)" color="warn"
+              class="float-end" *ngIf="!idJawaban.value">
+              <mat-icon>delete</mat-icon> 123
+            </button>
+            <button mat-icon-button matTooltip="Hapus Jawaban {{ i + 1 }}" (click)="onHapusJawaban(idJawaban.value)" color="warn"
+              class="float-end" *ngIf="idJawaban.value">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <mat-checkbox class="float-end" formControlName="kunci">Kunci Jawaban</mat-checkbox>
+          </div>
+        </div>
+        <editor [init]="options" formControlName="jawaban"></editor>
+        <input hidden formControlName="id" #idJawaban>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-md-6 col-sm-12">
+    <div class="float-start" *ngIf="m['jenis'].value == 'PILIHAN GANDA'">
+      <button mat-raised-button matTooltip="Tambah Jawaban" (click)="addJawaban()" color="primary">
+        <mat-icon>add</mat-icon> TAMBAH JAWABAN
+      </button>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="float-end">
+      <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+        <i class="fa fa-times"></i> BATAL
+      </button>
+      <button type="submit" form="formData" mat-raised-button color="primary"
+        [disabled]="formData.invalid || submitted">
+        <i class="fa fa-save"></i> SIMPAN
+      </button>
+    </div>
+  </div>
+</mat-dialog-actions>

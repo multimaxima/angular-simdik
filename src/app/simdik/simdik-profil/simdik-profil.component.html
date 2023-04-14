@@ -1,0 +1,428 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="float-end">
+        <button mat-mini-fab color="primary" matTooltip="Simpan Data" [disabled]="!formData.valid || submitted"
+          (click)="onSubmit()">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="formData">
+            <div class="col-md-2 offset-md-5 col-sm-12">
+              <img src="/assets/noimage.jpg" style="width: 100%;" *ngIf="!data.foto && !imageSrc">
+              <img src="data:image/jpg;base64 {{ this.data.foto}}" style="width: 100%;" *ngIf="data.foto && !imageSrc">
+              <img src="{{ imageSrc }}" style="width: 100%;" *ngIf="imageSrc">
+              <button type="button" mat-raised-button color="primary" class="mt-1 w-100" (click)="file.click()">
+                <mat-icon>upload</mat-icon> UNGGAH FOTO
+              </button>
+              <input hidden type="file" #file (change)="onFileChange($event)" accept=".jpg, .jpeg, .png">
+            </div>
+            <span class="informasi d-flex align-items-center justify-content-center">Format JPG, PNG, JPEG | Max 3
+              MB</span>
+
+            <mat-form-field class="w-100 mt-3" appearance="outline">
+              <mat-label>Nama</mat-label>
+              <input matInput formControlName="nama">
+              <mat-error *ngIf="m['nama'].errors && m['nama'].errors['required']">Wajib diisi.</mat-error>
+            </mat-form-field>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Gelar Depan</mat-label>
+                  <input matInput formControlName="gelar_depan">
+                  <mat-error *ngIf="m['gelar_depan'].errors && m['gelar_depan'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Gelar Belakang</mat-label>
+                  <input matInput formControlName="gelar_belakang">
+                  <mat-error *ngIf="m['gelar_belakang'].errors && m['gelar_belakang'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Alamat</mat-label>
+              <input matInput formControlName="alamat">
+              <mat-error *ngIf="m['alamat'].errors && m['alamat'].errors['required']">Wajib diisi.</mat-error>
+            </mat-form-field>
+
+            <div class="row">
+              <div class="col-md-8 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Dusun</mat-label>
+                  <input matInput formControlName="dusun">
+                  <mat-error *ngIf="m['dusun'].errors && m['dusun'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>RT</mat-label>
+                  <input matInput formControlName="rt">
+                  <mat-error *ngIf="m['rt'].errors && m['rt'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>RW</mat-label>
+                  <input matInput formControlName="rw">
+                  <mat-error *ngIf="m['rw'].errors && m['rw'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Propinsi</mat-label>
+                  <mat-select formControlName="no_prop" (selectionChange)="getKota(formData.controls['no_prop'].value)">
+                    <mat-option [value]=""></mat-option>
+                    <mat-option *ngFor="let propinsi of prop" [value]="propinsi.no_prop">{{ propinsi.nama | uppercase
+                      }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['no_prop'].errors && m['no_prop'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline" *ngIf="formData.controls['no_prop'].value">
+                  <mat-label>Kota/Kabupaten</mat-label>
+                  <mat-select formControlName="no_kab"
+                    (selectionChange)="getKecamatan(formData.controls['no_prop'].value, formData.controls['no_kab'].value)">
+                    <mat-option [value]=""></mat-option>
+                    <mat-option *ngFor="let kota of kab" [value]="kota.no_kab">{{ kota.nama | uppercase }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['no_kab'].errors && m['no_kab'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline" *ngIf="formData.controls['no_kab'].value">
+                  <mat-label>Kecamatan</mat-label>
+                  <mat-select formControlName="no_kec"
+                    (selectionChange)="getDesa(formData.controls['no_prop'].value, formData.controls['no_kab'].value, formData.controls['no_kec'].value)">
+                    <mat-option [value]=""></mat-option>
+                    <mat-option *ngFor="let kecamatan of kec" [value]="kecamatan.no_kec">{{ kecamatan.nama | uppercase
+                      }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['no_kec'].errors && m['no_kec'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline" *ngIf="formData.controls['no_kec'].value">
+                  <mat-label>Desa/Kelurahan</mat-label>
+                  <mat-select formControlName="no_kel">
+                    <mat-option [value]=""></mat-option>
+                    <mat-option *ngFor="let desa of kel" [value]="desa.no_kel">{{ desa.nama | uppercase }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['no_kel'].errors && m['no_kel'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Kodepos</mat-label>
+                  <input matInput formControlName="kodepos">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <h2 style="text-align: center;">KOORDINAT RUMAH</h2>
+
+            <div class="premap">
+              <google-map height="400px" width="100%" [center]="center" [zoom]="zoom" (mapClick)="addMarker($event)">
+                <map-marker [position]="markerPositions[0]" [options]="markerOptions">
+                </map-marker>
+              </google-map>
+
+              <button mat-raised-button class="w-100 mt-2" color="primary" (click)="getLocation()"
+                matTooltip="Melacak Posisi Otomatis">
+                <mat-icon>location_on</mat-icon> LACAK POSISI SAYA
+              </button>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Garis Lintang</mat-label>
+                  <input matInput formControlName="lat" readonly>
+                  <mat-error *ngIf="m['lat'].errors && m['lat'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Garis Bujur</mat-label>
+                  <input matInput formControlName="lng" readonly>
+                  <mat-error *ngIf="m['lng'].errors && m['lng'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>NIP</mat-label>
+                  <input matInput formControlName="nip">
+                  <mat-error *ngIf="m['nip'].errors && m['nip'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Jabatan</mat-label>
+                  <input matInput formControlName="jabatan">
+                  <mat-error *ngIf="m['jabatan'].errors && m['jabatan'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Pangkat</mat-label>
+                  <input matInput formControlName="pangkat">
+                  <mat-error *ngIf="m['pangkat'].errors && m['pangkat'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Golongan</mat-label>
+                  <input matInput formControlName="golongan">
+                  <mat-error *ngIf="m['golongan'].errors && m['golongan'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Tempat Lahir</mat-label>
+                  <input matInput formControlName="temp_lahir">
+                  <mat-error *ngIf="m['temp_lahir'].errors && m['temp_lahir'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Tanggal Lahir</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="tgl_lahir">
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="m['tgl_lahir'].errors && m['tgl_lahir'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>HP</mat-label>
+                  <input matInput formControlName="hp" (keyup)="onValidateHp($event)">
+                  <mat-error *ngIf="m['hp'].errors && m['hp'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+                <div class="alert alert-danger" role="alert" *ngIf="!hpOk">Nomor HP telah terdaftar, silahkan
+                  menggunakan nomor lain.</div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Telepon</mat-label>
+                  <input matInput formControlName="telp">
+                  <mat-error *ngIf="m['telp'].errors && m['telp'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Jenis Kelamin</mat-label>
+                  <mat-select formControlName="kelamin">
+                    <mat-option [value]="1">LAKI-LAKI</mat-option>
+                    <mat-option [value]="2">PEREMPUAN</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['kelamin'].errors && m['kelamin'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Agama</mat-label>
+                  <mat-select formControlName="id_agama">
+                    <mat-option *ngFor="let agm of agama" [value]="agm.id">{{ agm.agama | uppercase }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['id_agama'].errors && m['id_agama'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Pendidikan</mat-label>
+                  <mat-select formControlName="id_pendidikan">
+                    <mat-option *ngFor="let pend of pendidikan" [value]="pend.id">{{ pend.pendidikan | uppercase
+                      }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="m['id_pendidikan'].errors && m['id_pendidikan'].errors['required']">Wajib
+                    diisi.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Nama Sekolah/Univesitas</mat-label>
+                  <input matInput formControlName="sekolah">
+                  <mat-error *ngIf="m['sekolah'].errors && m['sekolah'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Lulus Tahun</mat-label>
+                  <input matInput formControlName="lulusan">
+                  <mat-error *ngIf="m['lulusan'].errors && m['lulusan'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Angkatan Tahun</mat-label>
+                  <input matInput formControlName="angkatan">
+                  <mat-error *ngIf="m['angkatan'].errors && m['angkatan'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <span style="font-size: 16px; font-weight: bold;">TENTANG SAYA</span>
+            <div class="col-md-12 mb-3">
+              <textarea formControlName="tentang" [ngxSummernote]="config"></textarea>
+            </div>
+            
+            <span style="font-size: 16px; font-weight: bold;">PRESTASI</span>
+            <div class="col-md-12 mb-3">
+              <textarea formControlName="prestasi" [ngxSummernote]="config"></textarea>
+            </div>
+            
+            <span style="font-size: 16px; font-weight: bold;">VISI & MISI</span>
+            <div class="col-md-12 mb-3">
+              <textarea formControlName="visimisi" [ngxSummernote]="config"></textarea>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput formControlName="email" (keyup)="onValidateEmail($event)">
+                  <mat-error *ngIf="m['email'].errors && m['email'].errors['required']">Wajib diisi.</mat-error>
+                  <mat-error *ngIf="m['email'].errors && m['email'].errors['email']">Format email tidak
+                    valid.</mat-error>
+                </mat-form-field>
+                <div class="alert alert-danger" role="alert" *ngIf="!emailOk">
+                  Email telah terdaftar, silahkan menggunakan email lain.
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Username</mat-label>
+                  <input matInput formControlName="username" (keyup)="onValidateUsername($event)">
+                  <mat-error *ngIf="m['username'].errors && m['username'].errors['required']">Wajib diisi.</mat-error>
+                  <mat-error *ngIf="m['username'].errors && m['username'].errors['minlength']">Minimal 5
+                    karakter.</mat-error>
+                </mat-form-field>
+                <div class="alert alert-danger" role="alert" *ngIf="!usernameOk">
+                  Username telah terdaftar, silahkan menggunakan username lain.
+                </div>
+              </div>
+            </div>
+
+            <h2>Sosial Media</h2>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Facebook</mat-label>
+                  <input matInput formControlName="facebook">
+                  <mat-error *ngIf="m['facebook'].errors && m['facebook'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Instagram</mat-label>
+                  <input matInput formControlName="instagram">
+                  <mat-error *ngIf="m['instagram'].errors && m['instagram'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Twitter</mat-label>
+                  <input matInput formControlName="twitter">
+                  <mat-error *ngIf="m['twitter'].errors && m['twitter'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Google</mat-label>
+                  <input matInput formControlName="google">
+                  <mat-error *ngIf="m['google'].errors && m['google'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Youtube</mat-label>
+                  <input matInput formControlName="youtube">
+                  <mat-error *ngIf="m['youtube'].errors && m['youtube'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Whatsapp</mat-label>
+                  <input matInput formControlName="whatsapp">
+                  <mat-error *ngIf="m['whatsapp'].errors && m['whatsapp'].errors['required']">Wajib diisi.</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <h2>Hak Akses</h2>
+            <ul>
+              <li *ngIf="this.data.administrator == 1">Administrator</li>
+              <li *ngIf="this.data.kepsek == 1">Kepala Sekolah</li>
+              <li *ngIf="this.data.waka == 1">Wakil Kepala Sekolah</li>
+              <li *ngIf="this.data.tu == 1">Tata Usaha</li>
+              <li *ngIf="this.data.guru == 1">Guru Pengajar</li>
+              <li *ngIf="this.data.guru_bp == 1">Guru BK</li>
+              <li *ngIf="this.data.perpus == 1">Petugas Perpustakaan</li>
+              <li *ngIf="this.data.web_operator == 1">Operator Website Sekolah</li>
+              <li *ngIf="this.data.ppdb == 1">Penerimaan Peserta Didik Baru</li>
+              <li *ngIf="this.data.bel_sekolah == 1">Bel Sekolah</li>
+            </ul>            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

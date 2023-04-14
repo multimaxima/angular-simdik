@@ -1,0 +1,20 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <mat-calendar [(selected)]="selected"></mat-calendar>
+          <p>Selected date: {{selected}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

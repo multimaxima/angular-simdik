@@ -1,0 +1,213 @@
+<main id="main" class="main" *ngIf="!editMode">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field class="w-100" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <div class="card card-body bodi" style="overflow: auto;">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="edit" sticky>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="min">
+          <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="getReset(row.id, row)">
+              <mat-icon>key</mat-icon>
+              <span>Reset Password</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="foto" sticky>
+        <th mat-header-cell *matHeaderCellDef> FOTO </th>
+        <td mat-cell *matCellDef="let row" class="min">
+          <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto">
+          <img src="{{ row.foto}}" width="40" *ngIf="row.foto">
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nama" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> NAMA SISWA </th>
+        <td mat-cell *matCellDef="let row" class="datacell" width="20%">
+          {{ row.nama }}<br>
+          NIS : {{ row.nis }}<br>
+          Kelas : {{ row.kelas }} {{ row.kode ? row.kode : "" }} {{ row.sub_kelas ? row.sub_kelas : "" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ayah">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> AYAH </th>
+        <td mat-cell *matCellDef="let row" class="datacell">
+          <table width="100%">
+            <tr>
+              <td colspan="3">
+                <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto_ayah">
+                <img src="{{ row.foto_ayah }}" width="40" *ngIf="row.foto_ayah">
+              </td>
+            </tr>
+            <tr>
+              <td width="15%">Nama</td>
+              <td width="2%">:</td>
+              <td>{{ row.nama_ayah }}</td>
+            </tr>
+            <tr>
+              <td width="15%">Alamat</td>
+              <td width="2%">:</td>
+              <td>
+                {{ row.alamat_ayah | uppercase }}
+                {{ (row.dusun_ayah ? ', '+row.dusun_ayah : '') | uppercase }}
+                {{ (row.rt_ayah ? 'RT '+row.rt_ayah : '') | uppercase }}
+                {{ (row.rw_ayah ? 'RW '+row.rw_ayah : '') | uppercase }}
+                {{ (row.desa_ayah ? ', '+row.desa_ayah : '') | uppercase }}
+                {{ (row.kecamatan_ayah ? ', KECAMATAN '+row.kecamatan_ayah : '') | uppercase }}
+                {{ (row.kota_ayah ? ', '+row.kota_ayah : '') | uppercase }}
+                {{ (row.proppinsi_ayah ? ', '+row.proppinsi_ayah : '') | uppercase }}
+              </td>
+            </tr>
+            <tr>
+              <td>Pekerjaan</td>
+              <td>:</td>
+              <td>{{ row.pekerjaan_ayah }}</td>
+            </tr>
+            <tr>
+              <td>Penghasilan</td>
+              <td>:</td>
+              <td>Rp. {{ row.penghasilan_ayah }}</td>
+            </tr>
+            <tr>
+              <td>Nomor HP</td>
+              <td>:</td>
+              <td>{{ row.hp_ayah }}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>:</td>
+              <td>{{ row.status_ayah }}</td>
+            </tr>
+          </table>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ibu">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> IBU </th>
+        <td mat-cell *matCellDef="let row" class="datacell">
+          <table width="100%">
+            <tr>
+              <td colspan="3">
+                <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto_ibu">
+                <img src="{{ row.foto_ibu }}" width="40" *ngIf="row.foto_ibu">
+              </td>
+            </tr>
+            <tr>
+              <td width="15%">Nama</td>
+              <td width="2%">:</td>
+              <td>{{ row.nama_ibu }}</td>
+            </tr>
+            <tr>
+              <td width="15%">Alamat</td>
+              <td width="2%">:</td>
+              <td>
+                {{ row.alamat_ibu | uppercase }}
+                {{ (row.dusun_ibu ? ', '+row.dusun_ibu : '') | uppercase }}
+                {{ (row.rt_ibu ? 'RT '+row.rt_ibu : '') | uppercase }}
+                {{ (row.rw_ibu ? 'RW '+row.rw_ibu : '') | uppercase }}
+                {{ (row.desa_ibu ? ', '+row.desa_ibu : '') | uppercase }}
+                {{ (row.kecamatan_ibu ? ', KECAMATAN '+row.kecamatan_ibu : '') | uppercase }}
+                {{ (row.kota_ibu ? ', '+row.kota_ibu : '') | uppercase }}
+                {{ (row.proppinsi_ibu ? ', '+row.proppinsi_ibu : '') | uppercase }}
+              </td>
+            </tr>
+            <tr>
+              <td>Pekerjaan</td>
+              <td>:</td>
+              <td>{{ row.pekerjaan_ibu }}</td>
+            </tr>
+            <tr>
+              <td>Penghasilan</td>
+              <td>:</td>
+              <td>Rp. {{ row.penghasilan_ibu }}</td>
+            </tr>
+            <tr>
+              <td>Nomor HP</td>
+              <td>:</td>
+              <td>{{ row.hp_ibu }}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>:</td>
+              <td>{{ row.status_ibu }}</td>
+            </tr>
+          </table>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="wali">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> WALI </th>
+        <td mat-cell *matCellDef="let row" class="datacell">
+          <table width="100%">
+            <tr>
+              <td colspan="3">
+                <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto_wali">
+                <img src="{{ row.foto_wali }}" width="40" *ngIf="row.foto_wali">
+              </td>
+            </tr>
+            <tr>
+              <td width="15%">Nama</td>
+              <td width="2%">:</td>
+              <td>{{ row.nama_wali }}</td>
+            </tr>
+            <tr>
+              <td width="15%">Alamat</td>
+              <td width="2%">:</td>
+              <td>
+                {{ row.alamat_wali | uppercase }}
+                {{ (row.dusun_wali ? ', '+row.dusun_wali : '') | uppercase }}
+                {{ (row.rt_wali ? 'RT '+row.rt_wali : '') | uppercase }}
+                {{ (row.rw_wali ? 'RW '+row.rw_wali : '') | uppercase }}
+                {{ (row.desa_wali ? ', '+row.desa_wali : '') | uppercase }}
+                {{ (row.kecamatan_wali ? ', KECAMATAN '+row.kecamatan_wali : '') | uppercase }}
+                {{ (row.kota_wali ? ', '+row.kota_wali : '') | uppercase }}
+                {{ (row.proppinsi_wali ? ', '+row.proppinsi_wali : '') | uppercase }}
+              </td>
+            </tr>
+            <tr>
+              <td>Pekerjaan</td>
+              <td>:</td>
+              <td>{{ row.pekerjaan_wali }}</td>
+            </tr>
+            <tr>
+              <td>Penghasilan</td>
+              <td>:</td>
+              <td>Rp. {{ row.penghasilan_wali }}</td>
+            </tr>
+            <tr>
+              <td>Nomor HP</td>
+              <td>:</td>
+              <td>{{ row.hp_wali }}</td>
+            </tr>
+          </table>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+</main>

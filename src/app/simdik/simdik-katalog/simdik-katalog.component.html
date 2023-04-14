@@ -1,0 +1,159 @@
+<main id="main" class="main" *ngIf="!editMode">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <button mat-mini-fab class="float-end" color="primary" (click)="getDetil(0)" matTooltip="Tambah Data">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <div class="card bodi">
+    <div class="card-body">
+      <div style="overflow: auto;">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="edit" sticky>
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" class="min">
+              <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="getDetil(row.id)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit Data</span>
+                </button>
+                <button mat-menu-item (click)="hapusData(row.id, row.judul)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Hapus Data</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cover" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> COVER </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin">
+              {{ row.agama | uppercase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="kode" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> KODE </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.jenis_kode+row.kategori_kode+row.kode }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="jenis">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> JENIS </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.jenis }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="kategori">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> KATEGORI </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.kategori }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="judul" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> JUDUL </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.judul }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="diskripsi">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> DISKRIPSI </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin">
+              <div [innerHTML]="row.diskripsi | slice:0:50"></div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="penulis">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> PENULIS </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.penulis }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="penerbit">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> PENERBIT </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.penerbit }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tahun_terbit">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> TAHUN TERBIT </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tahun_terbit }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> FILE </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.file }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tahun_pengadaan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> TAHUN PENGADAAN </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tahun_pengadaan }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="bisa_dipinjam">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> BISA DIPINJAM </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.bisa_dipinjam == 1 ? 'YA':'TIDAK' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="masa_pinjam">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> MASA DIPINJAM </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.masa_pinjam }} Hari </td>
+          </ng-container>
+
+          <ng-container matColumnDef="item">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> JUMLAH ITEM </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"  style="text-align: right;"> {{ row.item | number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ada">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> ITEM ADA </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"  style="text-align: right;"> {{ row.ada | number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dipinjam">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> DIPINJAM </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"  style="text-align: right;"> {{ row.dipinjam | number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="hilang">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> HILANG </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin"  style="text-align: right;"> {{ row.hilang | number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="harga_buku">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> HARGA BUKU (Rp.) </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.harga_buku | number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="harga">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> HARGA SEWA (Rp.) </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.harga | number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="denda">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="min"> DENDA KETERLAMBATAN<br>PER HARI (Rp.) </th>
+            <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.denda | number }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</main>
+
+<app-simdik-katalog-detil [idKatalog]="idKatalog" (newItemEvent)="getData()" *ngIf="editMode"></app-simdik-katalog-detil>

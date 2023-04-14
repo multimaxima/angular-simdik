@@ -1,0 +1,63 @@
+<div class="dialog-title">
+  {{ (data.data == 0 ? 'TAMBAH JADWAL HARI '+data.hari : 'EDIT JADWAL HARI '+data.hari) | uppercase}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData">
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Jam Ke</mat-label>
+          <input matInput formControlName="jam">
+          <mat-error *ngIf="m['jam'].errors && m['jam'].errors['required']">Wajib diisi.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Dari Jam</mat-label>
+          <input type="time" matInput formControlName="awal">
+          <mat-error *ngIf="m['awal'].errors && m['awal'].errors['required']">Wajib diisi.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Sampai</mat-label>
+          <input type="time" matInput formControlName="akhir">
+          <mat-error *ngIf="m['akhir'].errors && m['akhir'].errors['required']">Wajib diisi.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Mata Pelajaran</mat-label>
+      <mat-select formControlName="id_mapel">
+        <mat-option *ngFor="let map of mata" [value]="map.id">{{ map.mapel }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_mapel'].errors && m['id_mapel'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Guru Pengajar</mat-label>
+      <mat-select formControlName="id_simdik">
+        <mat-option [value]=""></mat-option>
+        <mat-option *ngFor="let gur of guru" [value]="gur.id">
+          {{ gur.gelar_depan ? gur.gelar_depan+' ' : '' }}
+          {{ gur.nama }}
+          {{ gur.gelar_belakang ? ' '+gur.gelar_belakang : '' }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_simdik'].errors && m['id_simdik'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button mat-raised-button color="primary" [disabled]="!formData.valid || submitted" (click)="onSubmit()">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>

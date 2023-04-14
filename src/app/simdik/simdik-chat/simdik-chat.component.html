@@ -1,0 +1,90 @@
+<main id="main" class="main">
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <mat-tab-group color="primary">
+        <mat-tab label="GURU">
+          <div style="height: 77vh; overflow-y: auto;">
+            <table width="100%" class="table table-bordered table-list">
+              <tr *ngFor="let gur of guru">
+                <td width="15%">
+                  <img src="{{ gur.foto }}" *ngIf="gur.foto" width="100%" style="border-radius: 30%;">
+                  <img src="assets/noimage.jpg" *ngIf="!gur.foto" width="100%" style="border-radius: 30%;">
+                </td>
+                <td style="padding-left: 5px; vertical-align: middle;">
+                  {{ gur.gelar_depan ? gur.gelar_depan : null }}
+                  {{ gur.nama | uppercase }}
+                  {{ gur.gelar_belakang ? gur.gelar_belakang : null }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </mat-tab>
+        <mat-tab label="SISWA">
+          <div style="height: 77vh; overflow-y: auto;">
+            <table width="100%" class="table table-bordered table-list">
+              <tr *ngFor="let sis of siswa" (click)="onPilihSiswa(sis)">
+                <td width="15%">
+                  <img src="{{ sis.foto }}" *ngIf="sis.foto" width="100%" style="border-radius: 30%;">
+                  <img src="assets/noimage.jpg" *ngIf="!sis.foto" width="100%" style="border-radius: 30%;">
+                </td>
+                <td style="padding-left: 5px; vertical-align: middle; font-size: 12px;">
+                  {{ sis.nama | uppercase }}<br>
+                  {{ sis.nis | uppercase }} -
+                  {{ sis.kelas | uppercase }}
+                  {{ sis.kode ? sis.kode : null }}
+                  {{ sis.sub_kelas ? sis.sub_kelas : null }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </mat-tab>
+        <mat-tab label="ADMIN">
+          <div style="height: 77vh; overflow-y: auto;">
+            <table width="100%" class="table table-bordered table-list">
+              <tr *ngFor="let adm of admin">
+                <td width="15%">
+                  <img src="{{ adm.foto }}" *ngIf="adm.foto" width="100%" style="border-radius: 30%;">
+                  <img src="assets/noimage.jpg" *ngIf="!adm.foto" width="100%" style="border-radius: 30%;">
+                </td>
+                <td style="padding-left: 5px; vertical-align: middle;">
+                  {{ adm.nama | uppercase }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div class="col-md-8 col-sm-12">
+      <div class="card card-header">
+          <div class="col-md-12">
+          <div class="float-start">
+            {{ namaChat }}<br>
+            {{ statusChat }}
+          </div>
+          <div class="float-end">
+            <img src="{{ fotoChat }}" *ngIf="fotoChat" width="30">
+            <img src="assets/noimage.jpg" *ngIf="!fotoChat" width="30">
+          </div>
+        </div>
+      </div>
+      <div class="chat-card">
+        <div *ngFor="let pesan of chat">
+          <div class="card card-body card-lawan">
+            <span class="chat-title">{{ pesan.data.created_at }}</span>
+            {{ pesan.data.pesan }}
+          </div>
+        </div>        
+      </div>
+      <form [formGroup]="formData" (submit)="onKirim()">
+        <mat-form-field class="w-100" style="margin-top: 10px;" appearance="outline">
+          <mat-label>Tulis Pesan</mat-label>
+          <input matInput formControlName="pesan">
+          <button matSuffix mat-icon-button type="submit">
+            <mat-icon>send</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+</main>

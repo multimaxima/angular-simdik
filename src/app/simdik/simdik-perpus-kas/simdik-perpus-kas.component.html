@@ -1,0 +1,80 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <button mat-mini-fab class="float-end" color="primary" matTooltip="Tambah Data">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <div class="row bodi">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let row" class="min">                
+                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit Data</span>
+                  </button>
+                  <button mat-menu-item>
+                    <mat-icon>delete</mat-icon>
+                    <span>Hapus Data</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="waktu">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> WAKTU </th>
+              <td mat-cell *matCellDef="let row" class="datacell"> {{ row.waktu | date:'dd/mm/yyyy - hh:ss' }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="keterangan">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> KETERANGAN </th>
+              <td mat-cell *matCellDef="let row" class="datacell"> {{ row.keterangan }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="masuk">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> MASUK </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.masuk | number }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="keluar">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> KELUAR </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.keluar | number }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sisa">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> SISA </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin" style="text-align: right;"> {{ row.sisa | number }} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

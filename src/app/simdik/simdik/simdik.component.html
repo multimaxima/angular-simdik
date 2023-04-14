@@ -1,0 +1,23 @@
+<app-simdik-header 
+    [userId]="profil.id"
+    [nama]="profil.nama"
+    [foto]="profil.foto"
+    [username]="profil.username"
+    [logo]="logo"
+     *ngIf="!(_router.url === '/simdik/login' || _router.url === '/pages-error404')"></app-simdik-header>
+
+<app-simdik-sidenav 
+    [administrator]="profil.administrator"
+    [kepsek]="profil.kepsek"
+    [waka]="profil.waka"
+    [tu]="profil.tu"
+    [guru]="profil.guru"
+    [guru_bp]="profil.guru_bp"
+    [perpus]="profil.perpus"
+    [web_operator]="profil.web_operator"
+    [ppdb]="profil.ppdb"
+    [bel_sekolah]="profil.bel_sekolah"
+    [walikelas]="profil.walikelas"
+    *ngIf="!(_router.url === '/simdik/login' || _router.url === '/pages-error404')"></app-simdik-sidenav>
+<router-outlet></router-outlet>
+<!-- <app-footer *ngIf="!(_router.url === '/login' || _router.url === '/pages-error404')"></app-footer> -->

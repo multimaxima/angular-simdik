@@ -1,0 +1,54 @@
+<main style="background-image: url(assets/back.jpg); background-size: 100% 100%;">
+    <div class="container">
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <div class="d-flex justify-content-center py-4">
+                <a routerLink="/" class="logo-login d-flex align-items-center w-auto">
+                  <img src="{{ logo }}" *ngIf="logo">
+                </a>                
+              </div>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h1 class="card-title text-center p-2 fs-4" style="font-weight: bold;">LOGIN</h1>
+                  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <mat-label>Username</mat-label>
+                      <input matInput formControlName="username">
+                      <mat-error *ngIf="m['username'].errors && m['username'].errors['required']">Username wajib diisi.</mat-error>
+                      <mat-error *ngIf="m['username'].errors && m['username'].errors['minlength']">Minimal 5 karakter.</mat-error>
+                    </mat-form-field>
+  
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <mat-label>Password</mat-label>
+                      <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+                      <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
+                        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                      </button>
+                      <mat-error *ngIf="m['password'].errors && m['password'].errors['required']">Password wajib diisi.</mat-error>
+                      <mat-error *ngIf="m['password'].errors && m['password'].errors['minlength']">Minimal 5 karakter.</mat-error>
+                    </mat-form-field>
+
+                    <mat-error *ngIf="errors?.username">
+                      {{ errors?.username }}
+                    </mat-error>
+                    <mat-error *ngIf="errors?.password">
+                      {{ errors?.password }}
+                    </mat-error>
+                    <div class="alert alert-danger" *ngIf="errors?.error">
+                      {{ errors?.error }}
+                    </div>
+
+                    <button type="submit" mat-raised-button color="primary" style="width: 100%; height: 45px;" [disabled]="!this.loginForm.valid || loading">
+                      {{ loading ? 'MOHON TUNGGU...' : 'LOGIN' }}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+   </main>

@@ -1,0 +1,82 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <div class="row bodi">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="judul">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> JUDUL </th>
+              <td mat-cell *matCellDef="let row" class="datacell"> {{ row.judul }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="kode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> BARCODE </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.kode }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ada">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin">
+                {{ row.ada == 1 ? 'ADA' : 'DIPINJAM' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hilang">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> HILANG </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin">
+                <mat-icon *ngIf="row.hilang == 1">check</mat-icon>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="peminjam">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> PEMINJAM </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin">
+                <span *ngIf="row.id_siswa_peminjam">
+                  {{ row.siswa }}
+                </span>
+                <span *ngIf="row.id_guru_peminjam">
+                  {{ row.gelar_depan ? row.gelar_depan : '' }}
+                  {{ row.guru }}
+                  {{ row.gelar_belakang ? row.gelar_belakang : '' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pinjam">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> PINJAM </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_pinjam | date:'dd/MM/yyyy' }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="kembali">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> HARUS KEMBALI </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_harus_kembali | date:'dd/MM/yyyy' }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>    
+  </div>
+</main>

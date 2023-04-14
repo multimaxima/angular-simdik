@@ -1,0 +1,57 @@
+<div class="dialog-title">
+  {{ data.data.id ? 'EDIT JADWAL BEL SEKOLAH' : 'TAMBAH JADWAL BEL SEKOLAH'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-8 col-sm-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Hari</mat-label>
+          <mat-select formControlName="id_hari">
+            <mat-option *ngFor="let har of data.hari" [value]="har.id">{{ har.hari | uppercase }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="m['id_hari'].errors && m['id_hari'].errors['required']">Wajib diisi.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>Jam</mat-label>
+          <input type="time" matInput formControlName="jam">
+          <mat-error *ngIf="m['jam'].errors && m['jam'].errors['required']">Wajib diisi.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Suara</mat-label>
+      <mat-select formControlName="id_suara">
+        <mat-option *ngFor="let sur of data.suara" [value]="sur.id" (onSelectionChange)="onPilih(sur.id)">
+          {{ sur.kategori | uppercase }} - {{ sur.keterangan | uppercase }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['id_suara'].errors && m['id_suara'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <audio controls="controls" *ngIf="testSuara" class="w-100 mb-2">
+      <source [src]="testSuara" type="audio/mp3">
+    </audio>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Keterangan</mat-label>
+      <input matInput formControlName="keterangan">
+      <mat-error *ngIf="m['keterangan'].errors && m['keterangan'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>

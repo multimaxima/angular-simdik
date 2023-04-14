@@ -1,0 +1,38 @@
+<mat-dialog-content>
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Cari data...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" matSort class="table table-hover">
+    <ng-container matColumnDef="foto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> FOTO </th>
+      <td mat-cell *matCellDef="let row" class="min">
+        <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto" style="border-radius: 10px;">
+        <img src="{{ row.foto}}" width="40" *ngIf="row.foto" style="border-radius: 10px;">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nip">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> NIP </th>
+      <td mat-cell *matCellDef="let row" class="datacell"> {{ row.nip }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nama">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> NAMA </th>
+      <td mat-cell *matCellDef="let row" class="datacell"> {{ row.nama | uppercase }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="jabatan">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> JABATAN </th>
+      <td mat-cell *matCellDef="let row" class="datacell"> {{ row.jabatan | uppercase }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row (click)="clickedRows(row.id)" *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+</mat-dialog-content>

@@ -1,0 +1,173 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+@import '/src/assets/css/style.css';
+@import '/src/assets/css/bootstrap-icons.css';
+@import '/src/assets/css/font.css';
+@import '/src/assets/css/material.css';
+
+td.min {
+	white-space: nowrap;
+	width: 0.1%;
+	padding: 0;
+}
+
+th.min {
+	white-space: nowrap;
+	width: 0.1%;
+}
+
+@media (min-width: 1199px) {
+	.control-label {
+		margin-top: 7px;
+		text-align: right;
+	}
+}
+
+@media (max-width: 1199px) {
+	.control-label {
+		margin-top: 7px;
+		//text-align: right;
+	}
+}
+
+.align-right {
+	text-align: right;
+}
+
+.dialog-title {
+	padding: 15px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.btn-group-xs>.btn,
+.btn-xs {
+	padding: 0.2rem 0.45rem;
+	font-size: 0.75rem;
+	border-radius: 0.2rem;
+	min-width: 30px;
+}
+
+.nav-link {
+	display: block;
+	padding: 0.5rem 1rem;
+	color: #0d6efd;
+	text-decoration: none;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.form-group {
+	margin-bottom: 5px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.form-check-group {
+	margin-top: 10px;
+}
+
+.form-check-input[type="checkbox"] {
+	border-radius: 0.25em;
+}
+
+.form-label {
+	margin-left: 10px;
+}
+
+.inline {
+	display: inline-block;
+	width: 100%;
+}
+
+.informasi {
+	font-size: 12px;
+	margin-top: 3px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+td {
+	vertical-align: top;
+}
+
+td.datacell {
+	padding-top: .7rem;
+	padding-bottom: .7rem;
+}
+
+td.datacellmin {
+	padding-top: .7rem;
+	padding-bottom: .7rem;
+	white-space: nowrap;
+	width: 0.1%;
+}
+
+.alert {
+	font-size: .8rem;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+	margin-top: -1rem;
+}
+
+.bodi {
+	margin-top: -0.7rem;
+}
+
+.card-up {
+	margin-top: -1.5rem;
+}
+
+.chat-title {
+	font-size: 10px;
+}
+
+.chat-card {
+	height: 70vh; 
+	overflow-y: auto; 
+	width: 100%; 
+	background-image: url('assets/chat.jpg');
+	background-size: cover;
+	padding: 5px; 
+}
+
+.card-lawan {
+	margin-bottom: 3px;
+	width: auto;
+	max-width: 65%;
+	padding: 5px;
+	background-color: white;
+}
+
+.card-ku {
+	margin-bottom: 3px;
+	width: auto;
+	max-width: 65%;
+	padding: 5px;
+	background-color: white;
+}
+
+.premap {
+	padding: 5px;
+	border: solid 1px #babcbe;
+	border-radius: 5px;
+	margin-bottom: 15px;
+}
+
+.table-list tr :hover {
+	background-color: bisque;
+}

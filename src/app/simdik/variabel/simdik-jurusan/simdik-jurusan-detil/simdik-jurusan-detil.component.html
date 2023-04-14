@@ -1,0 +1,30 @@
+<div class="dialog-title">
+  {{ data.id ? 'EDIT JURUSAN' : 'TAMBAH JURUSAN'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Jurusan</mat-label>
+      <input matInput formControlName="jurusan">
+      <mat-error *ngIf="m['jurusan'].errors && m['jurusan'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Kode</mat-label>
+      <input matInput formControlName="kode">
+      <mat-error *ngIf="m['kode'].errors && m['kode'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>

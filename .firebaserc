@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "simdik-f9f0d": {
+      "hosting": {
+        "simdik": [
+          "simdik-f9f0d"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "simdik-f9f0d"
+  }
+}

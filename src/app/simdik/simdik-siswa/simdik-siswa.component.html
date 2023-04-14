@@ -1,0 +1,401 @@
+<main id="main" class="main" *ngIf="!editMode">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="float-end">
+        <button mat-mini-fab color="primary" matTooltip="Tambah Data" (click)="getDetil(0)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-mini-fab color="accent" matTooltip="Download Master Siswa" (click)="getMaster()">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" matTooltip="Import Data" (click)="importSiswa.click()" *ngIf="idKelas">
+          <mat-icon>publish</mat-icon>
+        </button>
+        <input hidden type="file" #importSiswa accept=".xls, .xlsx" (change)="getImport($event)">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Cari data...</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Kelas</mat-label>
+        <mat-select (selectionChange)="getDatas($event)">
+          <mat-option [value]="0"></mat-option>
+          <mat-option *ngFor="let kls of kelas" [value]="kls.id">
+            {{ kls.kelas }}
+            {{ kls.kode ? kls.kode : '' }}
+            {{ kls.sub_kelas ? kls.sub_kelas : '' }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="card card-body bodi">
+    <div style="overflow: auto;">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="edit" sticky>
+          <th mat-header-cell *matHeaderCellDef class="min"></th>
+          <td mat-cell *matCellDef="let row" class="min">
+            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="getDetil(row.id)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit Data</span>
+              </button>
+              <button mat-menu-item (click)="getReset(row.id, row)">
+                <mat-icon>key</mat-icon>
+                <span>Reset Password</span>
+              </button>
+              <button mat-menu-item (click)="getHapus(row.id, row)">
+                <mat-icon>delete</mat-icon>
+                <span>Hapus Data</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="foto" sticky>
+          <th mat-header-cell *matHeaderCellDef class="min"> FOTO </th>
+          <td mat-cell *matCellDef="let row" class="min">
+            <img src="assets/noimage.jpg" width="40" *ngIf="!row.foto" style="border-radius: 10px;">
+            <img src="{{ row.foto}}" width="40" *ngIf="row.foto" style="border-radius: 10px;">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nama" sticky>
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NAMA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.nama }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="panggilan">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NAMA PANGGILAN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.panggilan }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="alamat_tinggal">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ALAMAT TEMPAT TINGGAL </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            {{ row.alamat_tinggal | uppercase }}
+            {{ (row.dusun_tinggal ? ', '+row.dusun_tinggal : '') | uppercase }}
+            {{ (row.rt_tinggal ? ' RT '+row.rt_tinggal : '') | uppercase }}
+            {{ (row.rw_tinggal ? ' RW '+row.rw_tinggal : '') | uppercase }}
+            {{ (row.desa_tinggal ? ', '+row.desa_tinggal : '') | uppercase }}
+            {{ (row.kecamatan_tinggal ? ', KECAMATAN '+row.kecamatan_tinggal : '') | uppercase }}
+            {{ (row.kota_tinggal ? ', '+row.kota_tinggal : '') | uppercase }}
+            {{ (row.proppinsi_tinggal ? ', '+row.proppinsi_tinggal : '') | uppercase }}
+            {{ (row.kodepos_tinggal ? ' '+row.kodepos_tinggal : '') | uppercase }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status_tinggal">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> STATUS TEMPAT TINGGAL </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.status_tinggal }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="jarak_sekolah">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> JARAK TEMPAT TINGGAL KE SEKOLAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.jarak_sekolah }} Km.</td>
+        </ng-container>
+
+        <ng-container matColumnDef="jarak_rumah">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> JARAK TEMPAT TINGGAL KE RUMAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.jarak_rumah }} Km.</td>
+        </ng-container>
+
+        <ng-container matColumnDef="alamat_rumah">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ALAMAT RUMAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            {{ row.alamat_rumah | uppercase }}
+            {{ (row.dusun_rumah ? ', '+row.dusun_rumah : '') | uppercase }}
+            {{ (row.rt_rumah ? ' RT '+row.rt_rumah : '') | uppercase }}
+            {{ (row.rw_rumah ? ' RW '+row.rw_rumah : '') | uppercase }}
+            {{ (row.desa_rumah ? ', '+row.desa_rumah : '') | uppercase }}
+            {{ (row.kecamatan_rumah ? ', KECAMATAN '+row.kecamatan_rumah : '') | uppercase }}
+            {{ (row.kota_rumah ? ', '+row.kota_rumah : '') | uppercase }}
+            {{ (row.proppinsi_rumah ? ', '+row.proppinsi_rumah : '') | uppercase }}
+            {{ (row.kodepos_rumah ? ' '+row.kodepos_rumah : '') | uppercase }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nis">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NIS </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.nis }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nisn">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NISN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.nisn }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="telp">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TELEPON </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.telp }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="hp">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NOMOR HANDPHONE </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.hp }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="whatsapp">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NOMOR WHATSAPP </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.whatsapp }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="temp_lahir">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TEMPAT LAHIR </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.temp_lahir }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tgl_lahir">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TANGGAL LAHIR </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_lahir }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kelamin">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> L/P </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            {{ row.kelamin == 1 ? 'L':'P' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kelas">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> KELAS </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            {{ row.kelas }}
+            {{ row.kode ? row.kode : '' }}
+            {{ row.sub_kelas ? row.sub_kelas : "" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tgl_masuk">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TANGGAL MASUK </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_masuk }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="asal_sekolah">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ASAL SEKOLAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.asal_sekolah }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="no_sttb">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NOMOR STTB </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.no_sttb }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tgl_sttb">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TANGGAL STTB </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_sttb }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="no_stl">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NOMOR STL </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.no_stl }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tgl_stl">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TANGGAL STL </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_stl }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lama_belajar">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> LAMA BELAJAR </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.lama_belajar }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="asal_pindahan">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> PINDAHAN DARI </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.asal_pindahan }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="alasan_pindahan">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ALASAN PINDAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.alasan_pindahan }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="agama">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> AGAMA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.agama }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="wna">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> WARGANEGARA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            {{ row.wna == 1 ? 'WNI':'WNA' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="negara">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ASAL NEGARA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.negara }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="anak_ke">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ANAK KE </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.anak_ke }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sdr_kandung">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> SAUDARA KANDUNG </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.sdr_kandung }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sdr_tiri">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> SAUDARA TIRI </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.sdr_tiri }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sdr_angkat">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> SAUDARA ANGKAT </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.sdr_angkat }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="yatim">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ANAK YATIM </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin">
+            {{ row.yatim == 1 ? 'YA': 'TIDAK' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bahasa">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> BAHASA SEHARI-HARI </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.bahasa }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="goldar">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> GOLONGAN DARAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.goldar }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sakit">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> SAKIT PERNAH DIDERITA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.sakit }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kelainan">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> KELAINAN FISIK </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.kelainan }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tinggi">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TINGGI BADAN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tinggi }} cm. </td>
+        </ng-container>
+
+        <ng-container matColumnDef="berat">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> BERAT BADAN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.berat }} kg. </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kesenian">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> HOBBY KESENIAN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.kesenian }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="olahraga">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> HOBBY OLAHRAGA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.olahraga }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="organisasi">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> HOBBY ORGANISASI </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.organisasi }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lain">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> HOBBY LAIN-LAIN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.lain }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="beasiswa">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> BEASISWA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.beasiswa }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tgl_meninggalkan">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> TANGGAL MENINGGALKAN SEKOLAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.tgl_meninggalkan }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pindah_ke">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> PINDAH KE </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.pindah_ke }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="alasan_pindah_ke">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> ALASAN PINDAH </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.alasan_pindah_ke }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="no_ijasah_lulus">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NOMOR IJASAH KELULUSAN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.no_ijasah_lulus }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="no_tanda_lulus">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NOMOR TANDA KELULUSAN </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.no_tanda_lulus }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nilai_rata">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NILAI RATA-RATA </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.nilai_rata }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="melanjutkan_ke">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> MELANJUTKAN KE </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.melanjutkan_ke }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bekerja_di">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> BEKERJA DI </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.bekerja_di }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nik">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> NIK </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.nik }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="no_kk">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> KK </th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.no_kk }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> EMAIL</th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.email }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef class="min" mat-sort-header> USERNAME</th>
+          <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.username }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+</main>
+
+<app-simdik-siswa-detil [idSiswa]="idSiswa" (newItemEvent)="getData(0)" *ngIf="editMode"></app-simdik-siswa-detil>

@@ -1,0 +1,101 @@
+<main id="main" class="main">
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="pagetitle float-start">
+        <h1>{{ title }}</h1>
+      </div>
+      <button mat-mini-fab class="float-end" color="primary" (click)="getDetil({})" matTooltip="Tambah Data" *ngIf="idKelas && idMapel">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Cari data...</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Masukkan kata kunci pencarian" #input>
+      </mat-form-field>
+    </div>
+    <div class="col-md-2 col-sm-12">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Kelas</mat-label>
+        <mat-select (selectionChange)="filterKelas($event)">
+          <mat-option [value]=""></mat-option>
+          <mat-option *ngFor="let kls of kelas" [value]="kls.id">{{ kls.tingkat }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Mata Pelajaran</mat-label>
+        <mat-select (selectionChange)="filterMapel($event)">
+          <mat-option [value]=""></mat-option>
+          <mat-option *ngFor="let map of mapel" [value]="map.id">{{ map.mapel }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>  
+
+  <div class="row bodi">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let row" class="min">
+                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="getDetil(row)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit Data</span>
+                  </button>
+                  <button mat-menu-item (click)="hapusData(row.id)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Hapus Data</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="jenis">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> JENIS </th>
+              <td mat-cell *matCellDef="let row" class="datacellmin"> {{ row.jenis | uppercase }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="soal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> SOAL </th>
+              <td mat-cell *matCellDef="let row" class="datacell">
+                <div [innerHTML]="row.soal | noSanitize"></div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="jawaban">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> JAWABAN </th>
+              <td mat-cell *matCellDef="let row" class="datacell" width="30%">
+                <ol type="a">
+                  <li *ngFor="let jawab of row.jawaban">
+                    <label [innerHTML]="jawab.jawaban | noSanitize"></label>
+                    <i *ngIf="jawab.kunci == 1" class="fa fa-check"></i>
+                  </li>
+                </ol>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

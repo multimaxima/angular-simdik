@@ -1,0 +1,53 @@
+<div class="dialog-title">
+  {{ data.id ? 'EDIT PEMBAYARAN' : 'TAMBAH PEMBAYARAN'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Jenis</mat-label>
+      <mat-select formControlName="jenis">
+        <mat-option value="PEMBAYARAN RUTIN BULANAN">PEMBAYARAN RUTIN BULANAN</mat-option>
+        <mat-option value="SEKALI BAYAR">SEKALI BAYAR</mat-option>
+      </mat-select>
+      <mat-error *ngIf="m['jenis'].errors && m['jenis'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Keterangan</mat-label>
+      <input matInput formControlName="keterangan">
+      <mat-error *ngIf="m['keterangan'].errors && m['keterangan'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline" *ngIf="m['jenis'].value == 'PEMBAYARAN RUTIN BULANAN'">
+      <mat-label>Setiap Tanggal</mat-label>
+      <input type="number" matInput formControlName="tanggal">
+      <mat-error *ngIf="m['tanggal'].errors && m['tanggal'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline" *ngIf="m['jenis'].value == 'SEKALI BAYAR'">
+      <mat-label>Batas Akhir Tanggal</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="akhir">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="m['akhir'].errors && m['akhir'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Nominal (Rp.)</mat-label>
+      <input type="number" step="any" matInput formControlName="nominal">
+      <mat-error *ngIf="m['nominal'].errors && m['nominal'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>
+  </div>
+</mat-dialog-actions>

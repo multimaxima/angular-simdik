@@ -1,0 +1,34 @@
+<div class="dialog-title">
+  {{ data.id ? 'EDIT MATA PELAJARAN' : 'TAMBAH MATA PELAJARAN'}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <form [formGroup]="formData" id="formData" (ngSubmit)="onSubmit()">
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <mat-label>Nama Mata Pelajaran</mat-label>
+      <input matInput formControlName="mapel">
+      <mat-error *ngIf="m['mapel'].errors && m['mapel'].errors['required']">Wajib diisi.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <mat-label>Kode Mata Pelajaran</mat-label>
+      <input matInput formControlName="kode">
+    </mat-form-field>
+
+    <mat-label>Tingkatan Pendidikan</mat-label><br>
+    <mat-checkbox formControlName="tingkat_1">SD/MI Sederajat</mat-checkbox><br>
+    <mat-checkbox formControlName="tingkat_2">SMP/MTs Sederajat</mat-checkbox><br>
+    <mat-checkbox formControlName="tingkat_3">SMA/SMK/MA Sederajat</mat-checkbox>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <div class="col-12 align-right">
+    <button mat-raised-button color="warn" mat-dialog-close [disabled]="submitted">
+      <i class="fa fa-times"></i> BATAL
+    </button>
+    <button type="submit" form="formData" mat-raised-button color="primary" [disabled]="formData.invalid || submitted">
+      <i class="fa fa-save"></i> SIMPAN
+    </button>    
+  </div>
+</mat-dialog-actions>
